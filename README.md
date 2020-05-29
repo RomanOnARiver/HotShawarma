@@ -1,2 +1,2 @@
-# HotShawarma
-A third-party remote control for Roku smart devices and Roku smart TVs
+# Hot Shawarma
+Hot Shawarma is a third-party remote control application for Roku smart devices and Roku smart TVs.
