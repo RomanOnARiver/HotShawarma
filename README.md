@@ -1,3 +1,3 @@
 # Hot Shawarma
 Hot Shawarma is a third-party remote control application for Roku smart devices and Roku smart TVs.
-<a href="https://twitter.com/HotShawarmaApp?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @HotShawarmaApp</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=Follow%20%40bukotsunikki)](https://twitter.com/HotShawarmaApp?ref_src=twsrc%5Etfw)
