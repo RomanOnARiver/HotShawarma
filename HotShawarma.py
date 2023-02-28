@@ -316,6 +316,9 @@ class MainWindow(wx.Frame):
         else:
             pge=resp.read().decode()
             #print('\n\n'+pge+'\n\n')
+            msg=wx.MessageDialog(self,message='Press any button on your remote to stop the sound. If you don\'t hear a sound, the remote\'s battery level may be low or it may be out of range.',caption='Listen for your remote',style=wx.OK|wx.OK_DEFAULT|wx.ICON_INFORMATION)
+            msg.ShowModal()
+            
 
     def findRokus(self):
         print('Searching for Rokus on the network...')
@@ -1017,13 +1020,13 @@ class MainWindow(wx.Frame):
             self.btnFindRemote.Show()
             if not findRemoteSupport[1]:
                 self.btnFindRemote.Disable()
-                self.btnFindRemoteTip=wx.ToolTip('Though your device supports FindRemote, your remote does not. Consider upgrading to the Enhanced voice remote to use this feature.')
+                self.btnFindRemoteTip=wx.ToolTip('Though your device supports FindRemote, your remote does not. Consider upgrading to the Voice Remote Pro to use this feature.')
                 self.btnFindRemote.SetToolTip(self.btnFindRemoteTip)
             else:
                 self.lblFindRemote.Show()
                 self.btnFindRemote.Show()
                 self.btnFindRemote.Enable()
-                self.btnFindRemoteTip=wx.ToolTip('Ring your remote if having trouble locating it.')
+                self.btnFindRemoteTip=wx.ToolTip('Activate the lost remote finder feature to locate a misplaced remote.')
                 self.btnFindRemote.SetToolTip(self.btnFindRemoteTip)
                 #self.btnFindRemote.SetToolTip(None)
         else:
@@ -1574,7 +1577,7 @@ class MainWindow(wx.Frame):
 
     def onAbout(self,e):
         print('About...')
-        msg=wx.MessageDialog(self,message='Hot Shawarma v. 0.02.11.21-alpha\nURL: https://github.com/RomanOnARiver/HotShawarma\nArtwork/Icons: https://www.intentionallyleftblankdesigns.com',caption='About',style=wx.OK|wx.OK_DEFAULT|wx.ICON_INFORMATION)
+        msg=wx.MessageDialog(self,message='Hot Shawarma v. 0.2\nURL: https://github.com/RomanOnARiver/HotShawarma\nArtwork/Icons: https://www.intentionallyleftblankdesigns.com',caption='About',style=wx.OK|wx.OK_DEFAULT|wx.ICON_INFORMATION)
         msg.ShowModal()
 
     def createWidgets(self):
@@ -1614,10 +1617,14 @@ class MainWindow(wx.Frame):
         self.lblFindRemote.SetLabelMarkup('<u>Remote:</u>')
 
         self.btnFindRemote=wx.Button(self,pos=(15,97),size=(60,30),style=wx.BU_LEFT)
-        self.bmpFindRemote=wx.Bitmap('buttons/findremote.png',wx.BITMAP_TYPE_ANY)
-        self.btnFindRemote.SetBitmap(self.bmpFindRemote)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN: # mac doesn't allow customizing buttons and crashes when trying to use unicode emojis - how boring
+            self.btnFindRemote.SetLabel('+')
+        else:
+            self.bmpFindRemote=wx.Bitmap('buttons/findremote.png',wx.BITMAP_TYPE_ANY)
+            self.btnFindRemote.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnFindRemote.SetBitmap(self.bmpFindRemote)
         self.Bind(wx.EVT_BUTTON,self.btnFindRemote_Clicked,self.btnFindRemote)
-        self.btnFindRemote.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+        
 
         self.lblFindRemote.Disable()
         self.lblFindRemote.Hide()
@@ -1628,18 +1635,24 @@ class MainWindow(wx.Frame):
         self.lblVolume.SetLabelMarkup('<u>Volume:</u>')
 
         self.btnTVVolUp=wx.Button(self,pos=(85,90),size=(55,30)) # 85 90 55 20
-        self.bmpTVVolUp=wx.Bitmap('buttons/volup.png',wx.BITMAP_TYPE_ANY)
-        self.btnTVVolUp.SetBitmap(self.bmpTVVolUp)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnTVVolUp.SetLabel('V+')
+        else:
+            self.bmpTVVolUp=wx.Bitmap('buttons/volup.png',wx.BITMAP_TYPE_ANY)
+            self.btnTVVolUp.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnTVVolUp.SetBitmap(self.bmpTVVolUp)
         self.Bind(wx.EVT_BUTTON,self.btnTVVolUp_Clicked,self.btnTVVolUp)
-        self.btnTVVolUp.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnTVVolUpTip=wx.ToolTip('Increase your volume')
         self.btnTVVolUp.SetToolTip(self.btnTVVolUpTip)
 
         self.btnTVVolDown=wx.Button(self,pos=(85,125),size=(55,30)) # 85 115 55 20
-        self.bmpTVVolDown=wx.Bitmap('buttons/voldown.png',wx.BITMAP_TYPE_ANY)
-        self.btnTVVolDown.SetBitmap(self.bmpTVVolDown)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnTVVolDown.SetLabel('V-')
+        else:
+            self.bmpTVVolDown=wx.Bitmap('buttons/voldown.png',wx.BITMAP_TYPE_ANY)
+            self.btnTVVolDown.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnTVVolDown.SetBitmap(self.bmpTVVolDown)
         self.Bind(wx.EVT_BUTTON,self.btnTVVolDown_Clicked,self.btnTVVolDown)
-        self.btnTVVolDown.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnTVVolDownTip=wx.ToolTip('Decrease your volume')
         self.btnTVVolDown.SetToolTip(self.btnTVVolDownTip)
 
@@ -1716,26 +1729,35 @@ class MainWindow(wx.Frame):
         self.lblTV=wx.StaticText(self,label='',pos=(365,70))
         self.lblTV.SetLabelMarkup('<u>TV:</u>')
 
-        self.btnPowerOff=wx.Button(self,pos=(365,90),size=(30,30))
-        self.bmpPowerOff=wx.Bitmap('buttons/pwr.png',wx.BITMAP_TYPE_ANY)
-        self.btnPowerOff.SetBitmap(self.bmpPowerOff)
+        self.btnPowerOff=wx.Button(self,pos=(365,90),size=(55,30)) # 30, 30
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnPowerOff.SetLabel('Power')
+        else:
+            self.bmpPowerOff=wx.Bitmap('buttons/pwr.png',wx.BITMAP_TYPE_ANY)
+            self.btnPowerOff.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnPowerOff.SetBitmap(self.bmpPowerOff)
         self.Bind(wx.EVT_BUTTON,self.btnPowerOff_Clicked,self.btnPowerOff)
-        self.btnPowerOff.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnPowerOffTip=wx.ToolTip('TV: Power')
         self.btnPowerOff.SetToolTip(self.btnPowerOffTip)
         
 
-        self.btnSleep=wx.Button(self,pos=(365,125),size=(30,30))
-        self.bmpSleep=wx.Bitmap('buttons/sleep.png',wx.BITMAP_TYPE_ANY)
-        self.btnSleep.SetBitmap(self.bmpSleep)
+        self.btnSleep=wx.Button(self,pos=(365,125),size=(55,30)) # 30,30
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnSleep.SetLabel('Sleep')
+        else:
+            self.bmpSleep=wx.Bitmap('buttons/sleep.png',wx.BITMAP_TYPE_ANY)
+            self.btnSleep.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnSleep.SetBitmap(self.bmpSleep)
         self.Bind(wx.EVT_BUTTON,self.btnSleep_Clicked,self.btnSleep)
-        self.btnSleep.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+        
         self.btnSleepTip=wx.ToolTip('TV: Sleep')
         self.btnSleep.SetToolTip(self.btnSleepTip)
 
         # TODO: Add GameMode button if tv supports it. What does it do? What is it?
 
         # TODO: What other buttons are there relating to TV specific functions that we don't know about?
+
+        # TODO: Add keyboard button for fast/easy keyboard input to fields, using sendlit
 
         self.bmpCurrentChannel=wx.StaticBitmap(self,wx.ID_ANY,pos=(10,160),size=(145,109))
 
@@ -1785,75 +1807,102 @@ class MainWindow(wx.Frame):
         self.lblRemote.SetLabelMarkup('<u>Remote</u>')
 
         self.btnRemoteBack=wx.Button(self,pos=(275,285),size=(55,30)) # 230
-        self.bmpRemoteBack=wx.Bitmap('buttons/back.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteBack.SetBitmap(self.bmpRemoteBack)
-        self.btnRemoteBack.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteBack.SetLabel('←')
+        else:
+            self.bmpRemoteBack=wx.Bitmap('buttons/back.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteBack.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteBack.SetBitmap(self.bmpRemoteBack)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteBack_Clicked,self.btnRemoteBack)
         self.btnRemoteBackTip=wx.ToolTip('Remote: Back')
         self.btnRemoteBack.SetToolTip(self.btnRemoteBackTip)
 
         self.btnRemoteHome=wx.Button(self,pos=(345,285),size=(55,30)) # 300
-        self.bmpRemoteHome=wx.Bitmap('buttons/home.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteHome.SetBitmap(self.bmpRemoteHome)
-        self.btnRemoteHome.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteHome.SetLabel('⌂')
+        else:
+            self.bmpRemoteHome=wx.Bitmap('buttons/home.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteHome.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteHome.SetBitmap(self.bmpRemoteHome)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteHome_Clicked,self.btnRemoteHome)
         self.btnRemoteHomeTip=wx.ToolTip('Remote: Home')
         self.btnRemoteHome.SetToolTip(self.btnRemoteHomeTip)
 
         self.btnRemoteUp=wx.Button(self,pos=(320,320),size=(35,30))
-        self.bmpRemoteUp=wx.Bitmap('buttons/up.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteUp.SetBitmap(self.bmpRemoteUp)
-        self.btnRemoteUp.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteUp.SetLabel('↑')
+        else:
+            self.bmpRemoteUp=wx.Bitmap('buttons/up.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteUp.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+            self.btnRemoteUp.SetBitmap(self.bmpRemoteUp)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteUp_Clicked,self.btnRemoteUp)
         self.btnRemoteUpTip=wx.ToolTip('Remote: Up')
         self.btnRemoteUp.SetToolTip(self.btnRemoteUpTip)
 
         self.btnRemoteLeft=wx.Button(self,pos=(275,360),size=(35,30))
-        self.bmpRemoteLeft=wx.Bitmap('buttons/left.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteLeft.SetBitmap(self.bmpRemoteLeft)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteLeft.SetLabel('←')
+        else:
+            self.bmpRemoteLeft=wx.Bitmap('buttons/left.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteLeft.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+            self.btnRemoteLeft.SetBitmap(self.bmpRemoteLeft)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteLeft_Clicked,self.btnRemoteLeft)
-        self.btnRemoteLeft.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
         self.btnRemoteLeftTip=wx.ToolTip('Remote: Left')
         self.btnRemoteLeft.SetToolTip(self.btnRemoteLeftTip)
 
-        self.btnRemoteOK=wx.Button(self,pos=(320,360),size=(35,30))
-        self.bmpRemoteOK=wx.Bitmap('buttons/ok.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteOK.SetBitmap(self.bmpRemoteOK)
+        self.btnRemoteOK=wx.Button(self,pos=(315,360),size=(45,30)) # 320,360 35,30
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteOK.SetLabel('OK')
+        else:
+            self.bmpRemoteOK=wx.Bitmap('buttons/ok.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteOK.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+            self.btnRemoteOK.SetBitmap(self.bmpRemoteOK)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteOK_Clicked,self.btnRemoteOK)
-        self.btnRemoteOK.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
         self.btnRemoteOKTip=wx.ToolTip('Remote: OK')
         self.btnRemoteOK.SetToolTip(self.btnRemoteOKTip)
 
         self.btnRemoteRight=wx.Button(self,pos=(365,360),size=(35,30))
-        self.bmpRemoteRight=wx.Bitmap('buttons/right.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteRight.SetBitmap(self.bmpRemoteRight)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteRight.SetLabel('→')
+        else:
+            self.bmpRemoteRight=wx.Bitmap('buttons/right.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteRight.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+            self.btnRemoteRight.SetBitmap(self.bmpRemoteRight)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteRight_Clicked,self.btnRemoteRight)
-        self.btnRemoteRight.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
         self.btnRemoteRightTip=wx.ToolTip('Remote: Right')
         self.btnRemoteRight.SetToolTip(self.btnRemoteRightTip)
 
         self.btnRemoteDown=wx.Button(self,pos=(320,400),size=(35,30))
-        self.bmpRemoteDown=wx.Bitmap('buttons/down.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteDown.SetBitmap(self.bmpRemoteDown)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteDown.SetLabel('↓')
+        else:
+            self.bmpRemoteDown=wx.Bitmap('buttons/down.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteDown.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
+            self.btnRemoteDown.SetBitmap(self.bmpRemoteDown)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteDown_Clicked,self.btnRemoteDown)
-        self.btnRemoteDown.SetBackgroundColour((102,45,145,wx.ALPHA_OPAQUE))
         self.btnRemoteDownTip=wx.ToolTip('Remote: Down')
         self.btnRemoteDown.SetToolTip(self.btnRemoteDownTip)
 
         self.btnRemoteReplay=wx.Button(self,pos=(275,440),size=(40,30))
-        self.bmpRemoteReplay=wx.Bitmap('buttons/replay.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteReplay.SetBitmap(self.bmpRemoteReplay)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteReplay.SetLabel('⟲')
+        else:
+            self.bmpRemoteReplay=wx.Bitmap('buttons/replay.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteReplay.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteReplay.SetBitmap(self.bmpRemoteReplay)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteReplay_Clicked,self.btnRemoteReplay)
-        self.btnRemoteReplay.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemoteReplayTip=wx.ToolTip('Remote: Replay')
         self.btnRemoteReplay.SetToolTip(self.btnRemoteReplayTip)
         
 
-        self.btnRemoteVoice=wx.Button(self,pos=(320,440),size=(40,30)) 
-        self.bmpRemoteVoice=wx.Bitmap('buttons/voice.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteVoice.SetBitmap(self.bmpRemoteVoice)
+        self.btnRemoteVoice=wx.Button(self,pos=(320,440),size=(40,30))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteVoice.SetLabel('🎙️')
+        else:
+            self.bmpRemoteVoice=wx.Bitmap('buttons/voice.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteVoice.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteVoice.SetBitmap(self.bmpRemoteVoice)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteVoice_Clicked,self.btnRemoteVoice)
-        self.btnRemoteVoice.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemoteVoiceTip=wx.ToolTip('Remote: Voice Search')
         self.btnRemoteVoice.SetToolTip(self.btnRemoteVoiceTip)
 
@@ -1862,36 +1911,48 @@ class MainWindow(wx.Frame):
         # TODO: Suspend option for devices that have supports-suspend in device-info as true - button instead of/next to mic???
 
         self.btnRemoteInfo=wx.Button(self,pos=(365,440),size=(40,30))
-        self.bmpRemoteInfo=wx.Bitmap('buttons/info.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteInfo.SetBitmap(self.bmpRemoteInfo)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteInfo.SetLabel('*')
+        else:
+            self.bmpRemoteInfo=wx.Bitmap('buttons/info.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteInfo.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteInfo.SetBitmap(self.bmpRemoteInfo)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteInfo_Clicked,self.btnRemoteInfo)
-        self.btnRemoteInfo.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemoteInfoTip=wx.ToolTip('Remote: Info')
         self.btnRemoteInfo.SetToolTip(self.btnRemoteInfoTip)
 
-        self.btnRemoteReverse=wx.Button(self,pos=(275,475),size=(30,30))
-        self.bmpRemoteReverse=wx.Bitmap('buttons/reverse.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteReverse.SetBitmap(self.bmpRemoteReverse)
+        self.btnRemoteReverse=wx.Button(self,pos=(270,475),size=(35,30))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteReverse.SetLabel('⏪')
+        else:
+            self.bmpRemoteReverse=wx.Bitmap('buttons/reverse.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteReverse.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteReverse.SetBitmap(self.bmpRemoteReverse)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteReverse_Clicked,self.btnRemoteReverse)
-        self.btnRemoteReverse.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemoteReverseTip=wx.ToolTip('Remote: Reverse')
         self.btnRemoteReverse.SetToolTip(self.btnRemoteReverseTip)         
 
         self.btnRemotePlayPause=wx.Button(self,pos=(310,475),size=(60,30))
-        self.bmpRemotePlayPause=wx.Bitmap('buttons/playpause.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemotePlayPause.SetBitmap(self.bmpRemotePlayPause)
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemotePlayPause.SetLabel('⏯')
+        else:
+            self.bmpRemotePlayPause=wx.Bitmap('buttons/playpause.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemotePlayPause.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemotePlayPause.SetBitmap(self.bmpRemotePlayPause)
         self.Bind(wx.EVT_BUTTON,self.btnRemotePlayPause_Clicked,self.btnRemotePlayPause)
-        self.btnRemotePlayPause.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemotePlayPauseTip=wx.ToolTip('Remote: Play/Pause')
         self.btnRemotePlayPause.SetToolTip(self.btnRemotePlayPauseTip)    
 
-        self.btnRemoteForward=wx.Button(self,pos=(375,475),size=(30,30))
-        self.bmpRemoteForward=wx.Bitmap('buttons/forward.png',wx.BITMAP_TYPE_ANY)
-        self.btnRemoteForward.SetBitmap(self.bmpRemoteForward)
+        self.btnRemoteForward=wx.Button(self,pos=(375,475),size=(35,30))
+        if wx.GetOsVersion()[0]==wx.OS_MAC_OSX_DARWIN:
+            self.btnRemoteForward.SetLabel('⏩')
+        else:
+            self.bmpRemoteForward=wx.Bitmap('buttons/forward.png',wx.BITMAP_TYPE_ANY)
+            self.btnRemoteForward.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
+            self.btnRemoteForward.SetBitmap(self.bmpRemoteForward)
         self.Bind(wx.EVT_BUTTON,self.btnRemoteForward_Clicked,self.btnRemoteForward)
         if wx.GetOsVersion()[0]==wx.OS_WINDOWS_NT:
             self.btnRemoteForward.SetFont(wx.Font(70,wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL,False,'Segoe UI Symbol',wx.FONTENCODING_DEFAULT))
-        self.btnRemoteForward.SetBackgroundColour((0,0,0,wx.ALPHA_OPAQUE))
         self.btnRemoteForwardTip=wx.ToolTip('Remote: Forward')
         self.btnRemoteForward.SetToolTip(self.btnRemoteForwardTip)    
 
