@@ -1,8 +1,6 @@
 # Hot Shawarma
 Hot Shawarma is a third-party remote control application for Roku smart devices and Roku smart TVs.
 
-[Screenshot GNU] [Screenshot GNU TV] [Screenshot Mac] [Screenshot Mac TV] [Screenshot Win] [Screenshot Win TV]
-
 ## Requirements
 Hot Shawarma has been tested and confirmed to work on Ubuntu 18.04 64-bit or later, Mac 10.11.6 or later, and Windows 10 64-bit. It may work in other scenarios, but YMMV. On Windows you may need to install [Visual Studio Redistributable 2008](https://www.microsoft.com/en-us/download/confirmation.aspx?id=11895) from Microsoft.
 
