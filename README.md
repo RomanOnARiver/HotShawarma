@@ -48,7 +48,7 @@ Hot Shawarma includes support for custom launchers - this can be as simple as la
 * If your device is plugged into your TV’s USB port I will likely not be recognized until your TV is turned on manually, as most TVs do not ship with USB ports that provide power when the TV is off. Consider plugging in via the power adapter.
 * FindRemote may not work consistently, reliably, or at all yet. This is being investigated.
 * If you have launched the YouTube channel via Cast from mobile, other channels may refuse to load (and indeed the application may appear to freeze) until you disconnect your mobile device.
-* macOS buttons look wrong
+* There are no builds for macOS available yet, due to difficulties involving mandatory code signing. Run from source in the mean time.
 
 
 ## Reporting bugs
