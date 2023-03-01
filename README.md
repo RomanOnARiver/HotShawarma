@@ -15,7 +15,7 @@ In addition to deleting the folder with the application, you may wish to remove 
 - For Windows: ``` C:\Users\<your user name>\AppData\Local\Nemmy Games\Hot Shawarma ```
 
 ## Installation (packages)
-I would very much like to distribute this application as a deb/rpm, in a personal package archive (PPA), a snap, etc. under GNU/Linux, but I have limited experience in these formats. Anyone who can contribute feel free to contact me.
+I would very much like to distribute this application as a deb/rpm, in a personal package archive (PPA), a snap, flatpak, etc. under GNU/Linux, but I have limited experience in these formats. Anyone who can contribute feel free to contact me.
 
 ## Licensing
 Hot Shawarma is licensed under the terms of the GNU General Public License version 3. See the included gpl-3.0.txt file or https://www.gnu.org/licenses/gpl-3.0.en.html.
